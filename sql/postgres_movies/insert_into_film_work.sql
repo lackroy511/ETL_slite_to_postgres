@@ -10,7 +10,7 @@ INSERT INTO content.film_work (
     created_at, 
     updated_at
     ) 
-VALUES (%s, %s, %s, %s, %s, %s, %s, %s, NOW(), NOW()) 
+VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s) 
 ON CONFLICT (id) DO UPDATE SET
         title = EXCLUDED.title,
         description = EXCLUDED.description,

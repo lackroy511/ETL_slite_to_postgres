@@ -19,5 +19,5 @@ class Film(BaseModel):
     file_path: str | None = None
     rating: float | None = None
     type: Literal['movie', 'series']
-    # created_at: datetime | None = None
-    # updated_at: datetime | None = None
+    created_at: datetime | None = None
+    updated_at: datetime | None = None
