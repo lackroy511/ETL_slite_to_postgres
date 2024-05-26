@@ -1,10 +1,11 @@
 import sqlite3
 
-
 SQLITE_QUERIES_PATH = {
     'get_movies_count': 'sql/sqlite_movies/get_movies_count.sql',
     'get_movies_between': 'sql/sqlite_movies/get_movies_between.sql',
-    'get_genres': 'sql/sqlite_movies/get_genres.sql',
+    'get_genres_between': 'sql/sqlite_movies/get_genres_between.sql',
+    'get_persons_count': 'sql/sqlite_movies/get_persons_count.sql',
+    'get_persons_between': 'sql/sqlite_movies/get_persons_between.sql',
 }
 
 
@@ -34,7 +35,14 @@ class SQLiteMoviesDB(SQLiteConnector):
             query = file.read()
 
         self.cursor.execute(query)
-        return self.cursor.fetchall()
+        return self.cursor.fetchall()[0][0]
+
+    def get_persons_count(self) -> int:
+        with open(SQLITE_QUERIES_PATH['get_persons_count'], 'r') as file:
+            query = file.read()
+
+        self.cursor.execute(query)
+        return self.cursor.fetchall()[0][0]
 
     def get_movies(self, from_row: int, to_row: int) -> list[tuple]:
         with open(SQLITE_QUERIES_PATH['get_movies_between'], 'r') as file:
@@ -45,9 +53,20 @@ class SQLiteMoviesDB(SQLiteConnector):
         self.cursor.execute(query)
         return self.cursor.fetchall()
 
-    def get_genres(self) -> list[tuple]:
-        with open(SQLITE_QUERIES_PATH['get_genres'], 'r') as file:
+    def get_genres(self, from_row: int, to_row: int) -> list[tuple]:
+        with open(SQLITE_QUERIES_PATH['get_genres_between'], 'r') as file:
             query = file.read()
+            query = query.replace('FROM_ROW', str(from_row))
+            query = query.replace('TO_ROW', str(to_row))
+
+        self.cursor.execute(query)
+        return self.cursor.fetchall()
+
+    def get_persons(self, from_row: int, to_row: int) -> list[tuple]:
+        with open(SQLITE_QUERIES_PATH['get_persons_between'], 'r') as file:
+            query = file.read()
+            query = query.replace('FROM_ROW', str(from_row))
+            query = query.replace('TO_ROW', str(to_row))
 
         self.cursor.execute(query)
         return self.cursor.fetchall()

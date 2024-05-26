@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS content.film_work (
 
 CREATE TABLE IF NOT EXISTS content.genre(
     id uuid PRIMARY KEY,
-    name TEXT NOT NULL,
+    name TEXT UNIQUE NOT NULL,
     description TEXT,
     created_at timestamp with time zone,
     updated_at timestamp with time zone
@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS content.genre(
 
 CREATE TABLE IF NOT EXISTS content.person(
     id uuid PRIMARY KEY,
-    full_name TEXT NOT NULL,
+    full_name TEXT UNIQUE NOT NULL,
     birth_date DATE,
     created_at timestamp with time zone,
     updated_at timestamp with time zone

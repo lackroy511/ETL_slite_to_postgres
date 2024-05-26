@@ -1,8 +1,9 @@
-from pydantic import BaseModel
-from typing import Literal, Optional
-from uuid import UUID
 from datetime import date, datetime
 from enum import Enum
+from typing import Literal, Optional
+from uuid import UUID
+
+from pydantic import BaseModel
 
 
 class FilmType(str, Enum):
@@ -27,5 +28,13 @@ class Genre(BaseModel):
     id: str
     name: str
     description: str | None = None
+    created_at: datetime | None = None
+    updated_at: datetime
+
+
+class Person(BaseModel):
+    id: str
+    full_name: str
+    birth_date: date | None = None
     created_at: datetime | None = None
     updated_at: datetime

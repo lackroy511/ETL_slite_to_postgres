@@ -1,5 +1,6 @@
 DROP TABLE content.film_work CASCADE;
 DROP TABLE content.genre CASCADE;
+DROP TABLE content.person CASCADE;
 CREATE TABLE IF NOT EXISTS content.film_work (
     id uuid PRIMARY KEY,
     title TEXT NOT NULL,
@@ -14,11 +15,19 @@ CREATE TABLE IF NOT EXISTS content.film_work (
 );
 CREATE TABLE IF NOT EXISTS content.genre(
     id uuid PRIMARY KEY,
-    name TEXT NOT NULL,
+    name TEXT UNIQUE NOT NULL,
     description TEXT,
+    created_at timestamp with time zone,
+    updated_at timestamp with time zone
+);
+CREATE TABLE IF NOT EXISTS content.person(
+    id uuid PRIMARY KEY,
+    full_name TEXT UNIQUE NOT NULL,
+    birth_date DATE,
     created_at timestamp with time zone,
     updated_at timestamp with time zone
 );
 
 SELECT * FROM content.film_work;
 SELECT * FROM content.genre;
+SELECT * FROM content.person;

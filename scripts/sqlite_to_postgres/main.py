@@ -1,6 +1,7 @@
 import os
 
-from scripts.sqlite_to_postgres.interfaces.sqlite_to_psql_loader import SQLiteToPSQLoader
+from scripts.sqlite_to_postgres.interfaces.sqlite_to_psql_loader import \
+    SQLiteToPSQLoader
 
 SQLITE_DB_PATH = 'databases/movies.sqlite'
 PSQL_DSN = {
@@ -17,6 +18,7 @@ def main():
     loader.init_psql_schema()
     loader.load_movies(load_step=500)
     loader.load_genres(load_step=500)
+    loader.load_persons(load_step=500)
 
 
 if __name__ == '__main__':

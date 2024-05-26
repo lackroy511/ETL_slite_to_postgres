@@ -1,9 +1,10 @@
 import uuid
 from datetime import datetime
+
 import pytz
 
 from scripts.sqlite_to_postgres.models.psql_models import (
-    FilmType, Film, Genre,
+    Film, FilmType, Genre, Person,
 )
 
 
@@ -34,7 +35,7 @@ def prepare_psql_genres_data(genres: list[tuple]) -> list[Genre]:
     unique_genres = set()
     for genre in genres:
         if genre:
-            genre = genre[0].split(',')
+            genre = genre[1].split(',')
             genre = map(lambda genre: genre.replace(' ', ''), genre)
             unique_genres = set(genre).union(unique_genres)
     
@@ -52,3 +53,26 @@ def prepare_psql_genres_data(genres: list[tuple]) -> list[Genre]:
         )
     
     return new_genres
+
+
+def prepare_psql_person_data(persons_data: list[tuple]) -> list[Person]:
+    persons = []
+    for row in persons_data:
+        for person in row[1:]:
+            if person and person not in persons:
+                persons.append(person)
+    
+    new_persons = []
+    for person in persons:
+        person_data = {
+            'id': str(uuid.uuid4()),
+            'full_name': person,
+            'birth_date': None,
+            'created_at': datetime.now(tz=pytz.UTC).strftime('%Y-%m-%d %H:%M:%S'),
+            'updated_at': datetime.now(tz=pytz.UTC).strftime('%Y-%m-%d %H:%M:%S'),
+        }
+        new_persons.append(
+            tuple(dict(Person(**person_data)).values()),
+        )
+         
+    return new_persons
