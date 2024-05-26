@@ -45,36 +45,19 @@ class PostgreSQLConnector:
 
 
 class PostgreSQLMoviesDB(PostgreSQLConnector):
-    def init_schema(self):
-        with open(PSQL_QUERIES_PATH['schema_design'], 'r') as file:
+    def init_schema(self, query_path: str) -> None:
+        with open(query_path, 'r') as file:
             query = file.read()
 
         self.cursor.execute(query)
 
-    def insert_to_film_work(self, data: list[list], page_size: int = 5000) -> None:
-        with open(PSQL_QUERIES_PATH['insert_into_film_work'], 'r') as file:
-            query = file.read()
-
-        execute_batch(
-            self.cursor,
-            query,
-            data,
-            page_size=page_size,
-        )
-    
-    def insert_to_genres(self, data: list[tuple], page_size: int = 5000) -> None:
-        with open(PSQL_QUERIES_PATH['insert_into_genres'], 'r') as file:
-            query = file.read()
-
-        execute_batch(
-            self.cursor,
-            query,
-            data,
-            page_size=page_size,
-        )
-    
-    def insert_to_persons(self, data: list[tuple], page_size: int = 5000) -> None:
-        with open(PSQL_QUERIES_PATH['insert_into_persons'], 'r') as file:
+    def insert_entities(
+            self, 
+            query_path: str, 
+            data: list[list], 
+            page_size: int = 5000) -> None:
+        
+        with open(query_path, 'r') as file:
             query = file.read()
 
         execute_batch(

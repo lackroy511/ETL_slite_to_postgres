@@ -28,6 +28,6 @@ CREATE TABLE IF NOT EXISTS content.person(
     updated_at timestamp with time zone
 );
 
-SELECT * FROM content.film_work;
-SELECT * FROM content.genre;
-SELECT * FROM content.person;
+SELECT COUNT(*) FROM content.film_work;
+SELECT COUNT(*) FROM content.genre;
+SELECT COUNT(*) FROM content.person;
