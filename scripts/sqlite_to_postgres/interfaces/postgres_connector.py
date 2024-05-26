@@ -50,7 +50,7 @@ class PostgreSQLMoviesDB(PostgreSQLConnector):
 
         self.cursor.execute(query)
 
-    def insert_to_film_work(self, data: list[tuple], page_size: int = 5000) -> None:
+    def insert_to_film_work(self, data: list[list], page_size: int = 5000) -> None:
         with open(PSQL_QUERIES_PATH['insert_into_film_work'], 'r') as file:
             query = file.read()
 

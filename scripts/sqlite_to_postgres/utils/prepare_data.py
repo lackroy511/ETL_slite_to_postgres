@@ -9,19 +9,17 @@ def prepare_psql_movies_data(movies: list[tuple]) -> list[Film]:
     
     for movie in movies:
         movie_data = {
-            'id': str(uuid.uuid4),
+            'id': str(uuid.uuid4()),
             'title': movie[5],
             'description': movie[6],
             'creation_date': None,
             'certificate': None,
             'file_path': None,
-            'rating': movie[6],
-            'type': FilmType.movie,
-            'created_at': datetime.now(),
-            'updated_at': datetime.now(),
+            'rating': float(movie[8]) if movie[8] else None,
+            'type': 'movie',
         }
         new_movies.append(
-            Film(**movie_data),
+            tuple(dict(Film(**movie_data)).values()),
         )
     
     return new_movies
