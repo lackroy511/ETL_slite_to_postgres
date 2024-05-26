@@ -44,14 +44,13 @@ class PostgreSQLConnector:
 
 
 class PostgreSQLMoviesDB(PostgreSQLConnector):
-
     def init_schema(self):
         with open(PSQL_QUERIES_PATH['schema_design'], 'r') as file:
             query = file.read()
 
         self.cursor.execute(query)
 
-    def insert_to_film_work(self, data: list[tuple]):
+    def insert_to_film_work(self, data: list[tuple], page_size: int = 5000) -> None:
         with open(PSQL_QUERIES_PATH['insert_into_film_work'], 'r') as file:
             query = file.read()
 
@@ -59,5 +58,5 @@ class PostgreSQLMoviesDB(PostgreSQLConnector):
             self.cursor,
             query,
             data,
-            page_size=10000,
+            page_size=page_size,
         )

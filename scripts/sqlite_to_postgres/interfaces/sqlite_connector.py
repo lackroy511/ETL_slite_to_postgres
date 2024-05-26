@@ -35,7 +35,7 @@ class SQLiteMoviesDB(SQLiteConnector):
         self.cursor.execute(query)
         return self.cursor.fetchall()
     
-    def get_movies(self, from_row: int, to_row: int) -> list:
+    def get_movies(self, from_row: int, to_row: int) -> list[tuple]:
         with open(SQLITE_QUERIES_PATH['get_movies_between'], 'r') as file:
             query = file.read()
             query = query.replace('FROM_ROW', str(from_row))
