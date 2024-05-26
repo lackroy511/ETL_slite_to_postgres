@@ -2,7 +2,7 @@ import os
 
 from scripts.sqlite_to_postgres.interfaces.postgres_connector import PostgreSQLMoviesDB
 from scripts.sqlite_to_postgres.interfaces.sqlite_connector import SQLiteMoviesDB
-from scripts.sqlite_to_postgres.utils.prepare_data import prepare_psql_movies_data
+from scripts.sqlite_to_postgres.utils.prepare_data import prepare_psql_genres_data, prepare_psql_movies_data
 
 
 class SQLiteToPSQLoader:
@@ -31,3 +31,11 @@ class SQLiteToPSQLoader:
                 
                 from_row = to_row + 1
                 to_row = from_row + load_step
+
+    def load_genres(self, load_step: int = 5000) -> None:
+        with SQLiteMoviesDB(self.sqlite_db_path) as sqlite_db:
+            genres = sqlite_db.get_genres()
+            genres = prepare_psql_genres_data(genres)
+            
+            with PostgreSQLMoviesDB(**self.psql_dsn) as psql_db:
+                psql_db.insert_to_genres(genres, load_step)

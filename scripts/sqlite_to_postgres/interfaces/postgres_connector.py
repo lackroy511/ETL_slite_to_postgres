@@ -5,6 +5,7 @@ from psycopg2.extras import execute_batch
 PSQL_QUERIES_PATH = {
     'schema_design': 'sql/schema_design.sql',
     'insert_into_film_work': 'sql/postgres_movies/insert_into_film_work.sql',
+    'insert_into_genres': 'sql/postgres_movies/insert_into_genres.sql',
 }
 
 
@@ -52,6 +53,17 @@ class PostgreSQLMoviesDB(PostgreSQLConnector):
 
     def insert_to_film_work(self, data: list[list], page_size: int = 5000) -> None:
         with open(PSQL_QUERIES_PATH['insert_into_film_work'], 'r') as file:
+            query = file.read()
+
+        execute_batch(
+            self.cursor,
+            query,
+            data,
+            page_size=page_size,
+        )
+    
+    def insert_to_genres(self, data: list[tuple], page_size: int = 5000) -> None:
+        with open(PSQL_QUERIES_PATH['insert_into_genres'], 'r') as file:
             query = file.read()
 
         execute_batch(

@@ -1,0 +1,1 @@
+SELECT genre FROM movies;

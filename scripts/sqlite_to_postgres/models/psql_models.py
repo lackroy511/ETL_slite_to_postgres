@@ -18,6 +18,14 @@ class Film(BaseModel):
     certificate: str | None = None
     file_path: str | None = None
     rating: float | None = None
-    type: Literal['movie', 'series']
+    type: Literal[FilmType.movie, FilmType.series]
     created_at: datetime | None = None
-    updated_at: datetime | None = None
+    updated_at: datetime
+
+
+class Genre(BaseModel):
+    id: str
+    name: str
+    description: str | None = None
+    created_at: datetime | None = None
+    updated_at: datetime

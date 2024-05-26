@@ -1,5 +1,5 @@
 DROP TABLE content.film_work CASCADE;
-
+DROP TABLE content.genre CASCADE;
 CREATE TABLE IF NOT EXISTS content.film_work (
     id uuid PRIMARY KEY,
     title TEXT NOT NULL,
@@ -12,7 +12,13 @@ CREATE TABLE IF NOT EXISTS content.film_work (
     created_at timestamp with time zone,
     updated_at timestamp with time zone
 );
+CREATE TABLE IF NOT EXISTS content.genre(
+    id uuid PRIMARY KEY,
+    name TEXT NOT NULL,
+    description TEXT,
+    created_at timestamp with time zone,
+    updated_at timestamp with time zone
+);
 
-
-SELECT * FROM content.film_work
-WHERE title LIKE '%A Star Is Born%';
+SELECT * FROM content.film_work;
+SELECT * FROM content.genre;
