@@ -40,6 +40,7 @@ def main():
         SQLITE_QUERIES_PATH['get_movies_between'],
         PSQL_QUERIES_PATH['insert_into_film_work'],
         prepare_psql_movies_data,
+        load_step=500,
     )
     # Загрузить жанры
     loader.load_entities(
@@ -47,6 +48,7 @@ def main():
         SQLITE_QUERIES_PATH['get_genres_between'],
         PSQL_QUERIES_PATH['insert_into_genres'],
         prepare_psql_genres_data,
+        load_step=500,
     )
     # Загрузить людей
     loader.load_entities(
@@ -54,6 +56,7 @@ def main():
         SQLITE_QUERIES_PATH['get_persons_between'],
         PSQL_QUERIES_PATH['insert_into_persons'],
         prepare_psql_person_data,
+        load_step=500,
     )
 
 

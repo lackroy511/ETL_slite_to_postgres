@@ -38,3 +38,18 @@ class Person(BaseModel):
     birth_date: date | None = None
     created_at: datetime | None = None
     updated_at: datetime
+
+
+class FilmWorkGenre(BaseModel):
+    id: str
+    film_work_id: str
+    genre_id: str
+    created_at: datetime
+
+
+class FilmWorkPerson(BaseModel):
+    id: str
+    film_work_id: str
+    person_id: str
+    role: str
+    created_at: datetime
