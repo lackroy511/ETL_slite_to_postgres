@@ -2,12 +2,13 @@ import uuid
 from datetime import datetime
 
 import pytz
+import json
 
 from scripts.sqlite_to_postgres.cfg_variables import PSQL_DSN, SQLITE_DB_PATH
 from scripts.sqlite_to_postgres.interfaces.postgres_connector import PostgreSQLConnector
-# from scripts.sqlite_to_postgres.main import PSQL_DSN, SQLITE_DB_PATH
+from scripts.sqlite_to_postgres.interfaces.sqlite_connector import SQLiteConnector
 from scripts.sqlite_to_postgres.models.psql_models import (
-    Film, FilmType, FilmWorkGenre, Genre, Person,
+    Film, FilmType, FilmWorkGenre, FilmWorkPerson, Genre, Person,
 )
 
 
@@ -115,3 +116,57 @@ def prepare_psql_film_work_genre_data(sqlite_movies: list[tuple]) -> list[FilmWo
                 )
     
     return film_work_genre_relations
+
+
+def prepare_psql_film_work_person_data(sqlite_movies: list[tuple]) -> list[FilmWorkPerson]:
+    
+    with PostgreSQLConnector(**PSQL_DSN) as psql_db:
+        with SQLiteConnector(SQLITE_DB_PATH) as sqlite_db:
+            
+            for sqlite_movie in sqlite_movies:
+                roles = {
+                    'director': [],
+                    'writer': [],
+                    'actor': [],
+                }
+                sqlite_movie_id = sqlite_movie[1]
+                
+                if sqlite_movie[3]:
+                    roles['director'].extend(sqlite_movie[3].split(','))
+                
+                # ----------------------------------------------------------------
+                
+                if sqlite_movie[4]:
+                    sqlite_movie_writer_id = sqlite_movie[4]
+                    sqlite_db.cursor.execute(
+                        f"SELECT name FROM writers WHERE id='{sqlite_movie_writer_id}'",
+                    )
+                    sqlite_movie_writer_name = sqlite_db.cursor.fetchone()[0]
+                    if sqlite_movie_writer_name:
+                        roles['writer'].append(sqlite_movie_writer_name)
+                else:
+                    sqlite_movie_writers_ids = json.loads(sqlite_movie[9])
+                    
+                    for writer_id in sqlite_movie_writers_ids:
+                        sqlite_db.cursor.execute(
+                            f"SELECT name FROM writers WHERE id='{writer_id['id']}'",
+                        )
+                        sqlite_movie_writer_name = sqlite_db.cursor.fetchone()[0]
+                        if sqlite_movie_writer_name:
+                            roles['writer'].append(sqlite_movie_writer_name)
+                
+                # ----------------------------------------------------------------
+                
+                sqlite_db.cursor.execute(
+                    f"SELECT name FROM actors JOIN movie_actors ON actors.id = movie_actors.actor_id WHERE movie_actors.movie_id = '{sqlite_movie_id}';",
+                )
+                actors = sqlite_db.cursor.fetchall()
+                for actor in actors:
+                    if actor[0]:
+                        roles['actor'].append(actor[0])
+                
+                
+                    
+                
+                    
+            
