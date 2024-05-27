@@ -14,6 +14,7 @@ PSQL_QUERIES_PATH = {
     'insert_into_genres': 'sql/postgres_movies/insert_into_genres.sql',
     'insert_into_persons': 'sql/postgres_movies/insert_into_persons.sql',
     'insert_into_film_work_genre': 'sql/postgres_movies/insert_into_film_work_genres.sql',
+    'insert_into_film_work_persons': '/root/project/sql/postgres_movies/insert_into_film_work_persons.sql',
 }
 SQLITE_DB_PATH = 'databases/movies.sqlite'
 PSQL_DSN = {

@@ -54,6 +54,3 @@ ON content.film_work_genre (film_work_id, genre_id);
 
 CREATE UNIQUE INDEX IF NOT EXISTS film_work_person_role_index
 ON content.film_work_person (film_work_id, person_id, role);
-
-SELECT * FROM content.film_work
-WHERE title LIKE 'Star Trek'
