@@ -1,6 +1,7 @@
 DROP TABLE content.film_work CASCADE;
 DROP TABLE content.genre CASCADE;
 DROP TABLE content.person CASCADE;
+DROP TABLE content.film_work_genre CASCADE;
 CREATE TABLE IF NOT EXISTS content.film_work (
     id uuid PRIMARY KEY,
     title TEXT NOT NULL,
@@ -10,6 +11,7 @@ CREATE TABLE IF NOT EXISTS content.film_work (
     file_path TEXT,
     rating FLOAT,
     type TEXT not null,
+    sqlite_id VARCHAR(255) UNIQUE NOT NULL,
     created_at timestamp with time zone,
     updated_at timestamp with time zone
 );
@@ -27,7 +29,16 @@ CREATE TABLE IF NOT EXISTS content.person(
     created_at timestamp with time zone,
     updated_at timestamp with time zone
 );
+CREATE TABLE IF NOT EXISTS content.film_work_genre(
+    id uuid PRIMARY KEY,
+    film_work_id uuid REFERENCES content.film_work(id),
+    genre_id uuid REFERENCES content.genre(id),
+    created_at timestamp with time zone
+);
+CREATE UNIQUE INDEX IF NOT EXISTS film_work_genre_index
+ON content.film_work_genre (film_work_id, genre_id);
 
 SELECT COUNT(*) FROM content.film_work;
 SELECT COUNT(*) FROM content.genre;
 SELECT COUNT(*) FROM content.person;
+SELECT COUNT(*) FROM content.film_work_genre;

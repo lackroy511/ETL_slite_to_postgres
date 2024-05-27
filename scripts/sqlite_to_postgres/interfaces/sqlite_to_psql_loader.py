@@ -2,9 +2,6 @@ from scripts.sqlite_to_postgres.interfaces.postgres_connector import \
     PostgreSQLMoviesDB
 from scripts.sqlite_to_postgres.interfaces.sqlite_connector import \
     SQLiteMoviesDB
-from scripts.sqlite_to_postgres.utils.prepare_data import (
-    prepare_psql_genres_data, prepare_psql_movies_data, prepare_psql_person_data,
-)
 
 SQLITE_QUERIES_PATH = {
     'get_movies_count': 'sql/sqlite_movies/get_movies_count.sql',
@@ -52,11 +49,11 @@ class SQLiteToPSQLoader:
                 entities = sqlite_db.get_entities_in_range(
                     query_entities_between_path, from_row, to_row,
                 )
-                entities = prepare_psql_data_function(entities)
+                entities_data = prepare_psql_data_function(entities)
 
                 with PostgreSQLMoviesDB(**self.psql_dsn) as psql_db:
                     psql_db.insert_entities(
-                        insert_query_path,  entities, load_step,
+                        insert_query_path,  entities_data, load_step,
                     )
 
                 from_row = to_row + 1

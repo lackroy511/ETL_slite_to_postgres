@@ -1,34 +1,12 @@
 import os
 
+from scripts.sqlite_to_postgres.cfg_variables import PSQL_DSN, PSQL_QUERIES_PATH, SQLITE_DB_PATH, SQLITE_QUERIES_PATH
 from scripts.sqlite_to_postgres.interfaces.sqlite_to_psql_loader import \
     SQLiteToPSQLoader
 
 from scripts.sqlite_to_postgres.utils.prepare_data import (
-    prepare_psql_genres_data, prepare_psql_movies_data, prepare_psql_person_data,
+    prepare_psql_film_work_genre_data, prepare_psql_genres_data, prepare_psql_movies_data, prepare_psql_person_data,
 )
-
-SQLITE_QUERIES_PATH = {
-    'get_movies_count': 'sql/sqlite_movies/get_movies_count.sql',
-    'get_movies_between': 'sql/sqlite_movies/get_movies_between.sql',
-    'get_genres_count': 'sql/sqlite_movies/get_genres_count.sql',
-    'get_genres_between': 'sql/sqlite_movies/get_genres_between.sql',
-    'get_persons_count': 'sql/sqlite_movies/get_persons_count.sql',
-    'get_persons_between': 'sql/sqlite_movies/get_persons_between.sql',
-}
-PSQL_QUERIES_PATH = {
-    'schema_design': 'sql/schema_design.sql',
-    'insert_into_film_work': 'sql/postgres_movies/insert_into_film_work.sql',
-    'insert_into_genres': 'sql/postgres_movies/insert_into_genres.sql',
-    'insert_into_persons': 'sql/postgres_movies/insert_into_persons.sql',
-}
-SQLITE_DB_PATH = 'databases/movies.sqlite'
-PSQL_DSN = {
-    'dbname': os.getenv('POSTGRES_DB'),
-    'user': os.getenv('POSTGRES_USER'),
-    'password': os.getenv('POSTGRES_PASSWORD'),
-    'host': os.getenv('HOST'),
-    'port': os.getenv('PORT'),
-}
 
 
 def main():
@@ -56,6 +34,14 @@ def main():
         SQLITE_QUERIES_PATH['get_persons_between'],
         PSQL_QUERIES_PATH['insert_into_persons'],
         prepare_psql_person_data,
+        load_step=500,
+    )
+    # Заполнить m2m связь фильм-жанр
+    loader.load_entities(
+        SQLITE_QUERIES_PATH['get_movies_count'],
+        SQLITE_QUERIES_PATH['get_movies_between'],
+        PSQL_QUERIES_PATH['insert_into_film_work_genre'],
+        prepare_psql_film_work_genre_data,
         load_step=500,
     )
 

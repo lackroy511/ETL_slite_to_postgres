@@ -20,6 +20,7 @@ class Film(BaseModel):
     file_path: str | None = None
     rating: float | None = None
     type: Literal[FilmType.movie, FilmType.series]
+    sqlite_id: str | None = None
     created_at: datetime | None = None
     updated_at: datetime
 
