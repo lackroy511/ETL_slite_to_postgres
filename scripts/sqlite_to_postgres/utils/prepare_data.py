@@ -59,8 +59,11 @@ def prepare_psql_person_data(persons_data: list[tuple]) -> list[Person]:
     persons = []
     for row in persons_data:
         for person in row[1:]:
-            if person and person not in persons:
-                persons.append(person)
+            if person:
+                person = person.split(', ')
+                for p in person:
+                    if p not in persons:
+                        persons.append(p)
     
     new_persons = []
     for person in persons:
