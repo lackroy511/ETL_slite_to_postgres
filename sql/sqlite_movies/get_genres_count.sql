@@ -1,0 +1,1 @@
+SELECT COUNT(genre) FROM movies;

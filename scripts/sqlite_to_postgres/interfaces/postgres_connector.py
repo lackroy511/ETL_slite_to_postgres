@@ -1,13 +1,6 @@
 import psycopg2
 from psycopg2.extras import execute_batch
 
-PSQL_QUERIES_PATH = {
-    'schema_design': 'sql/schema_design.sql',
-    'insert_into_film_work': 'sql/postgres_movies/insert_into_film_work.sql',
-    'insert_into_genres': 'sql/postgres_movies/insert_into_genres.sql',
-    'insert_into_persons': 'sql/postgres_movies/insert_into_persons.sql',
-}
-
 
 class PostgreSQLConnector:
     def __init__(

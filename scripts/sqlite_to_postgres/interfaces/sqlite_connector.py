@@ -1,13 +1,5 @@
 import sqlite3
 
-SQLITE_QUERIES_PATH = {
-    'get_movies_count': 'sql/sqlite_movies/get_movies_count.sql',
-    'get_movies_between': 'sql/sqlite_movies/get_movies_between.sql',
-    'get_genres_between': 'sql/sqlite_movies/get_genres_between.sql',
-    'get_persons_count': 'sql/sqlite_movies/get_persons_count.sql',
-    'get_persons_between': 'sql/sqlite_movies/get_persons_between.sql',
-}
-
 
 class SQLiteConnector:
     def __init__(self, db_path: str) -> None:
