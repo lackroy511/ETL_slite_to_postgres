@@ -165,3 +165,50 @@ def get_actors(
                 list_of_actors.append(name)
                 
     return list_of_actors
+
+
+def get_film_work_person_relations(
+        sqlite_movie_id: tuple,
+        psql_db: PostgreSQLConnector,
+        persons_roles: dict[str, list[str]]) -> list[FilmWorkPerson]:
+    
+    film_work_person_relations = []
+    psql_db.cursor.execute(
+        f"SELECT id FROM content.film_work WHERE sqlite_id='{sqlite_movie_id}'",
+    )
+    psql_movie_id = psql_db.cursor.fetchone()[0]
+    
+    for role, persons in persons_roles.items():
+        psql_persons_ids = []
+        for person_name in persons:
+            person_id = get_psql_person_id(person_name, psql_db)
+            psql_persons_ids.extend(person_id)
+                
+            for psql_person_id in psql_persons_ids:
+                film_work_person_data = {
+                    'id': str(uuid.uuid4()),
+                    'film_work_id': psql_movie_id,
+                    'person_id':  psql_person_id,
+                    'role': role,
+                    'created_at': datetime.now(tz=pytz.UTC).strftime('%Y-%m-%d %H:%M:%S'),
+                }
+                film_work_person_relations.append(
+                    tuple(dict(FilmWorkPerson(**film_work_person_data)).values()),
+                )
+    
+    return film_work_person_relations
+
+
+def get_psql_person_id(
+        person_name: str,
+        psql_db: PostgreSQLConnector) -> list[str]:
+    
+    psql_db.cursor.execute(
+        'SELECT id FROM content.person WHERE full_name LIKE %s',
+        (f"%{person_name.lstrip(' ')}%",),
+    )
+    psql_person_id = psql_db.cursor.fetchone()[0]
+    if psql_person_id:
+        return [psql_person_id]
+
+    return []

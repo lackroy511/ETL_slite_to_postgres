@@ -13,6 +13,7 @@ from scripts.sqlite_to_postgres.models.psql_models import (
 from scripts.sqlite_to_postgres.utils.logic import (
     get_actors,
     get_directors,
+    get_film_work_person_relations,
     get_list_of_persons_from_sql_data, 
     form_new_genres, 
     form_new_persons, 
@@ -87,32 +88,10 @@ def prepare_psql_film_work_person_data(sqlite_movies: list[tuple]) -> list[FilmW
             persons_roles['actor'].extend(actors)
         
         with PostgreSQLConnector(**PSQL_DSN) as psql_db:
-            psql_db.cursor.execute(
-                f"SELECT id FROM content.film_work WHERE sqlite_id='{sqlite_movie_id}'",
+            film_work_person_relations.extend(
+                get_film_work_person_relations(
+                    sqlite_movie_id, psql_db, persons_roles,
+                ),
             )
-            psql_movie_id = psql_db.cursor.fetchone()[0]
-            
-            for role, persons in persons_roles.items():
-                psql_persons_ids = []
-                for person in persons:
-                    psql_db.cursor.execute(
-                        'SELECT id FROM content.person WHERE full_name LIKE %s',
-                        (f"%{person.lstrip(' ')}%",),
-                    )
-                    psql_person_id = psql_db.cursor.fetchone()[0]
-                    if psql_person_id:
-                        psql_persons_ids.append(psql_person_id)
-                        
-                    for psql_person_id in psql_persons_ids:
-                        film_work_person_data = {
-                            'id': str(uuid.uuid4()),
-                            'film_work_id': psql_movie_id,
-                            'person_id':  psql_person_id,
-                            'role': role,
-                            'created_at': datetime.now(tz=pytz.UTC).strftime('%Y-%m-%d %H:%M:%S'),
-                        }
-                        film_work_person_relations.append(
-                            tuple(dict(FilmWorkPerson(**film_work_person_data)).values()),
-                        )
     
     return film_work_person_relations
