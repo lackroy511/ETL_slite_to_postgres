@@ -5,7 +5,11 @@ from scripts.sqlite_to_postgres.interfaces.sqlite_to_psql_loader import \
     SQLiteToPSQLoader
 
 from scripts.sqlite_to_postgres.utils.prepare_data import (
-    prepare_psql_film_work_genre_data, prepare_psql_film_work_person_data, prepare_psql_genres_data, prepare_psql_movies_data, prepare_psql_person_data,
+    prepare_psql_film_work_genre_data, 
+    prepare_psql_film_work_person_data, 
+    prepare_psql_genres_data, 
+    prepare_psql_movies_data, 
+    prepare_psql_person_data,
 )
 
 
