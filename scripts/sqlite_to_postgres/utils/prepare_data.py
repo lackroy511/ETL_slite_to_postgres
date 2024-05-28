@@ -71,7 +71,6 @@ def prepare_psql_film_work_person_data(sqlite_movies: list[tuple]) -> list[FilmW
     film_work_person_relations = []
     for sqlite_movie in sqlite_movies:
         with SQLiteConnector(SQLITE_DB_PATH) as sqlite_db:
-            
             sqlite_movie_id = sqlite_movie[1]
             persons_roles = {
                 'director': [],
